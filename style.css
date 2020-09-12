@@ -1,0 +1,13 @@
+.container {
+    margin-top: 90px;
+}
+
+h1 {
+    font-family: 'Geostar Fill', cursive;
+}
+
+body {
+    /* Image available for free from https://hipwallpaper.com/question-mark-backgrounds */
+    background-image: url('./assets/images/question_marks.jpg');
+    background-size: cover;
+}
