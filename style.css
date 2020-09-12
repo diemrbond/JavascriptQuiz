@@ -13,7 +13,7 @@ h1 {
 }
 
 /* Set Initial States to Hidden */
-#timeRemaining, #countdown {
+#timeRemaining, #countdown, #questions {
     display: none;
 }
 

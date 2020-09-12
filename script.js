@@ -1,6 +1,7 @@
 // Query Selections / Elements
 // Time Area
 var timeRemainingElement = document.getElementById("timeRemaining");
+var timeRemainingCount = document.getElementById("timeCount");
 
 // Start Screen
 var startScreenContainer = document.getElementById("startScreen");
@@ -10,26 +11,37 @@ var startButton = document.getElementById("startQuiz");
 var countdownContainer = document.getElementById("countdown");
 var countdownStartElement = document.getElementById("countdownStart");
 
+// Questions
+var questionsContainer = document.getElementById("questions");
+
 // Variable Declaration
 var countDownToStart = 5;
 var countDownTimer = 60;
+var currentQuestion = 0;
+
+// Timer Declaration
 var startQuizIn;
+var quizEndsIn;
 
 // Initial State
-function init(){
+function init() {
 
     // Hide the time remaining element on the instruction screen
-    timeRemainingElement.setAttribute("style", "display: none;");
+    timeRemainingElement.style.display = "none";
+
+    // Show the Start Screen
+    hideUnhide(startScreenContainer);
 }
 
 // Start Quiz
-function startQuiz(){
+function startQuiz() {
 
-    // Hide the Start Screen
-    startScreenContainer.setAttribute("style", "display: none;");
-    
     // Show the Countdown Timer
-    countdownContainer.setAttribute("style", "display: block;");
+    hideUnhide(countdownContainer);
+
+    // Reset Countdown Timers
+    countDownToStart = 5;
+    countDownTimer = 60;
 
     // Start Countdown Timer
     countdownStartElement.textContent = countDownToStart + "...";
@@ -37,18 +49,26 @@ function startQuiz(){
 }
 
 // Load Questions
-function loadQuestions(){
+function loadQuestions() {
+    
+    // Show the Quiz Timer
+    timeRemainingCount.textContent = countDownTimer;
+    timeRemainingElement.style.display = "block";
+
+    // Start Quiz Countdown Timer
+    quizEndsIn = setInterval(countdownQuiz, 1000);
+
+    // Show the Questions
+    hideUnhide(questionsContainer);
     
 }
 
 // Countdown Timers
-function countdownStart(){
+function countdownStart() {
     countDownToStart--;
-    if (countDownToStart <= 0){
+    if (countDownToStart <= 0) {
         // Stop the Countdown Timer
         clearInterval(startQuizIn);
-        // Hide the Countdown Timer
-        countdownContainer.setAttribute("style", "display: none;");
         // Load the Questions
         loadQuestions();
     }
@@ -56,6 +76,36 @@ function countdownStart(){
         // Set the Countdown Timer to the current time
         countdownStartElement.textContent = countDownToStart + "...";
     }
+}
+
+function countdownQuiz() {
+
+    countDownTimer--;
+    if (countDownTimer <= 0) {
+        // Stop the Countdown Timer
+        clearInterval(quizEndsIn);
+    }
+    else {
+        // Set the Countdown Timer to the current time
+        timeRemainingCount.textContent = countDownTimer;
+    }
+}
+
+// Hide / Unhide Elements
+function hideUnhide(which) {
+
+    // Hide the Start Screen
+    startScreenContainer.style.display = "none";
+
+    // Hide the Countdown Timer
+    countdownContainer.style.display = "none";
+
+    // Hide the Questions
+    questionsContainer.style.display = "none";
+
+    // Unhide the Required Container
+    which.style.display = "block";
+
 }
 
 // Start Program
