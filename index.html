@@ -13,7 +13,8 @@
 
     <!-- Custom Stylesheets -->
     <link rel="stylesheet" href="./style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Geostar+Fill&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Geostar+Fill&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <!-- Page Components -->
     <title>Are you smarter than a Javascript Coder?</title>
@@ -31,10 +32,27 @@
         <button class="btn-info btn-lg ml-auto " id="highscores">View Highscores</button>
     </nav>
 
-    <section class="container">
+    <!-- Main Body Section -->
+    <section class="container text-center" id="startScreen">
+        <!-- Header -->
         <div class="row">
-            <h1 class="col-12 text-center">Are you smarter than a Javascript Coder?  </h1>
-        
+            <h1 class="col-12">Are you smarter than a Javascript Coder?</h1>
+        </div>
+        <!-- Instructions -->
+        <div class="row">
+            <div class="col-md-12 instructions">Press START to begin the quiz, to see if you know your stuff.</div>
+        </div>
+        <!-- Start Button -->
+        <div class="row">
+            <div class="col-12"><button class="btn-primary btn-lg" id="startQuiz">START</button></div>
+        </div>
+    </section>
+
+    <!-- Countdown to Start -->
+    <section class="container text-center" id="countdown">
+        <!-- Countdown -->
+        <div class="row">
+            <h1 class="col-12" id="countdownStart">#...</h1>
         </div>
     </section>
 
