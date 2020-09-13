@@ -21,7 +21,7 @@ h2 {
 }
 
 /* Set Initial States to Hidden */
-#timeRemaining, #countdown, #questions {
+#timeRemaining, #countdown, #questions, #finalScore {
     display: none;
 }
 

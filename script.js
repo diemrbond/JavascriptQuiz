@@ -15,6 +15,17 @@ var countdownStartElement = document.getElementById("countdownStart");
 var questionsContainer = document.getElementById("questions");
 var theQuestionContainer = document.getElementById("theQuestion");
 
+// Correct and Incorrect Responses
+var continueButtonCorrect = document.getElementById("continueQuizCorrect");
+var continueButtonIncorrect = document.getElementById("continueQuizIncorrect");
+
+// Final Scores
+var finalScoreContainer = document.getElementById("finalScore");
+var totalQuestionsElement = document.getElementById("totalQuestions");
+var correctElement = document.getElementById("correct");
+var incorrectElement = document.getElementById("incorrect");
+var totalScoreElement = document.getElementById("totalScore");
+
 // Variable Declaration
 var countDownToStart = 5;
 var countDownTimer = 60;
@@ -118,11 +129,18 @@ function setupQuestions() {
 // Display Next Question
 function displayNextQuestion() {
 
+    theQuestionContainer.innerHTML = "";
+
+    var theQuestionNumber = document.createElement("h1");
+    theQuestionNumber.textContent = "Q" + (currentQuestion + 1) + ": ";
+    theQuestionContainer.appendChild(theQuestionNumber);
+
     var theQuestionText = document.createElement("h2");
-    theQuestionText.textContent = quizQuestions[questionOrder[currentQuestion]].question;
+    theQuestionText.textContent += quizQuestions[questionOrder[currentQuestion]].question;
     theQuestionContainer.appendChild(theQuestionText);
 
     var theOptions = quizQuestions[questionOrder[currentQuestion]].options;
+    var theCorrect = quizQuestions[questionOrder[currentQuestion]].answer;
 
     for (var i = 0; i < theOptions.length; i++) {
 
@@ -131,6 +149,13 @@ function displayNextQuestion() {
 
         var thisButton = document.createElement("button");
         thisButton.setAttribute("data-index", i);
+        thisButton.setAttribute("data-toggle", "modal");
+        if (i == theCorrect) {
+            thisButton.setAttribute("data-target", "#correctResponse");
+        }
+        else {
+            thisButton.setAttribute("data-target", "#incorrectResponse");
+        }
         thisButton.setAttribute("class", "btn-primary btn-lg");
         thisButton.textContent = theOptions[i];
 
@@ -144,24 +169,51 @@ function displayNextQuestion() {
 function checkCorrect(which) {
 
     if (quizQuestions[questionOrder[currentQuestion]].answer == which) {
-        correctResponse();
+        myCorrect++;
     }
     else {
-        incorrectResponse();
+        myIncorrect++;
+        countDownTimer -= 10;
+
+        if (countDownTimer <= 0) {
+            // Brings up the Final Screen
+            finalScreen();
+        }
     }
 
 }
 
-// Correct Response
-function correctResponse(){
-    
-    myCorrect++;
+// Check final question
+function checkQuizEnd() {
+
+    currentQuestion++;
+
+    if ((currentQuestion < totalQuestions) && (countDownTimer > 0)) {
+        displayNextQuestion();
+    }
+    else {
+        // Brings up the Final Screen
+        finalScreen();
+    }
+
 }
 
-// Incorrect Response
-function incorrectResponse(){
-    
-    myIncorrect++;
+// Final Screen Function
+function finalScreen() {
+
+    // Stop the Quiz Countdown Timer
+    clearInterval(quizEndsIn);
+    timeRemainingElement.style.display = "none";
+
+    var questionsAnswered = myCorrect + myIncorrect;
+    var yourScore = (myCorrect * 3) - (myIncorrect * 2);
+
+    totalQuestionsElement.textContent = questionsAnswered;
+    correctElement.textContent = myCorrect;
+    incorrectElement.textContent = myIncorrect;
+    totalScoreElement.textContent = yourScore;
+
+    hideUnhide(finalScoreContainer);
 }
 
 // Countdown Timers
@@ -188,8 +240,8 @@ function countdownQuiz() {
     timeRemainingCount.textContent = countDownTimer;
 
     if (countDownTimer <= 0) {
-        // Stop the Quiz Countdown Timer
-        clearInterval(quizEndsIn);
+        // Brings up the Final Screen
+        finalScreen();
     }
 }
 
@@ -205,6 +257,9 @@ function hideUnhide(which) {
     // Hide the Questions
     questionsContainer.style.display = "none";
 
+    // Hide the Final Score
+    finalScoreContainer.style.display = "none";
+
     // Unhide the Required Container
     which.style.display = "block";
 
@@ -215,6 +270,8 @@ init();
 
 // Event Listeners
 startButton.addEventListener("click", startQuiz);
+continueButtonCorrect.addEventListener("click", checkQuizEnd);
+continueButtonIncorrect.addEventListener("click", checkQuizEnd);
 
 theQuestionContainer.addEventListener("click", function (event) {
 
