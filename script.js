@@ -21,6 +21,8 @@ var countDownTimer = 60;
 var currentQuestion = 0;
 var totalQuestions = Object.entries(quizQuestions).length;
 var questionOrder = [];
+var myCorrect = 0;
+var myIncorrect = 0;
 
 // Timer Declaration
 var startQuizIn;
@@ -39,12 +41,18 @@ function init() {
 // Start Quiz
 function startQuiz() {
 
+    event.preventDefault();
+
     // Show the Countdown Timer
     hideUnhide(countdownContainer);
 
     // Reset Countdown Timers
     countDownToStart = 5;
     countDownTimer = 60;
+
+    // Reset Scores    
+    myCorrect = 0;
+    myIncorrect = 0;
 
     // Start Countdown Timer
     countdownStartElement.textContent = countDownToStart + "...";
@@ -86,7 +94,7 @@ function shuffle(which) {
 
         // Move the number from 1 array to the other
         newArray.push(originalArray[index]);
-        originalArray.splice(index,1);        
+        originalArray.splice(index, 1);
     }
 
     // Return the new array order
@@ -109,7 +117,7 @@ function setupQuestions() {
 
 // Display Next Question
 function displayNextQuestion() {
-    
+
     var theQuestionText = document.createElement("h2");
     theQuestionText.textContent = quizQuestions[questionOrder[currentQuestion]].question;
     theQuestionContainer.appendChild(theQuestionText);
@@ -120,16 +128,40 @@ function displayNextQuestion() {
 
         var theDiv = document.createElement("div");
         theDiv.setAttribute("class", "theOptions");
-            
+
         var thisButton = document.createElement("button");
         thisButton.setAttribute("data-index", i);
         thisButton.setAttribute("class", "btn-primary btn-lg");
         thisButton.textContent = theOptions[i];
-    
+
         theDiv.appendChild(thisButton);
         theQuestionContainer.appendChild(theDiv);
-      }
+    }
 
+}
+
+// Check answer is correct
+function checkCorrect(which) {
+
+    if (quizQuestions[questionOrder[currentQuestion]].answer == which) {
+        correctResponse();
+    }
+    else {
+        incorrectResponse();
+    }
+
+}
+
+// Correct Response
+function correctResponse(){
+    
+    myCorrect++;
+}
+
+// Incorrect Response
+function incorrectResponse(){
+    
+    myIncorrect++;
 }
 
 // Countdown Timers
@@ -183,3 +215,13 @@ init();
 
 // Event Listeners
 startButton.addEventListener("click", startQuiz);
+
+theQuestionContainer.addEventListener("click", function (event) {
+
+    event.preventDefault();
+
+    if (event.target.matches("button")) {
+        var myNum = event.target.getAttribute("data-index");
+        checkCorrect(myNum);
+    }
+})
