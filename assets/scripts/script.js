@@ -140,7 +140,7 @@ function shuffle(which) {
     while (originalArray.length > 0) {
 
         // Pick a random index
-        var index = Math.floor(Math.random() * originalArray.length);
+        var index = generateRandomNumber(0, originalArray.length-1);
 
         // Move the number from 1 array to the other
         newArray.push(originalArray[index]);
@@ -150,6 +150,11 @@ function shuffle(which) {
     // Return the new array order
     console.log(" - " + newArray)
     return newArray;
+}
+
+// Randomiser
+function generateRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 // Sets up the Questions Order
@@ -206,6 +211,16 @@ function displayNextQuestion() {
     var theOptions = quizQuestions[questionOrder[currentQuestion]].options;
     var theCorrect = quizQuestions[questionOrder[currentQuestion]].answer;
 
+    // Create a traditional options order
+    var optionsOrder = [];
+    for (var i = 0; i < theOptions.length; i++) {
+        optionsOrder.push(i);
+    }
+
+    // Shuffle the options order
+    var tempArray = shuffle(optionsOrder);
+    optionsOrder = tempArray;
+
     // Loop through the number of options
     for (var i = 0; i < theOptions.length; i++) {
 
@@ -220,13 +235,13 @@ function displayNextQuestion() {
         // Create the button for the option
         var thisButton = document.createElement("button");
         // Set the option number
-        thisButton.setAttribute("data-index", i);
+        thisButton.setAttribute("data-index", optionsOrder[i]);
         // Attributes to control the modal
         thisButton.setAttribute("data-toggle", "modal");
         thisButton.setAttribute("data-backdrop", "static");
         thisButton.setAttribute("data-keyboard", "false");
         // Check if correct or incorrect option
-        if (i == theCorrect) {
+        if (optionsOrder[i] == theCorrect) {
             // Calls correct modal
             thisButton.setAttribute("data-target", "#correctResponse");
         }
@@ -236,10 +251,10 @@ function displayNextQuestion() {
         }
         // Add the button
         thisButton.setAttribute("class", "btn-primary btn-lg");
-        thisButton.textContent = theOptions[i];
+        thisButton.textContent = theOptions[optionsOrder[i]];
 
         // Log the option to the console
-        console.log(theOptions[i]);
+        console.log(theOptions[optionsOrder[i]]);
 
         // Add the button to the div, the div to the row
         theDiv.appendChild(thisButton);
