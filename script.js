@@ -26,6 +26,8 @@ var quizEndsIn;
 // Initial State
 function init() {
 
+    console.log("questions: "+quizQuestions)
+
     // Hide the time remaining element on the instruction screen
     timeRemainingElement.style.display = "none";
 
@@ -65,29 +67,30 @@ function loadQuestions() {
 
 // Countdown Timers
 function countdownStart() {
+    
     countDownToStart--;
+
+    // Set the Countdown Timer to the current time
+    countdownStartElement.textContent = countDownToStart + "...";
+    
     if (countDownToStart <= 0) {
         // Stop the Countdown Timer
         clearInterval(startQuizIn);
         // Load the Questions
         loadQuestions();
     }
-    else {
-        // Set the Countdown Timer to the current time
-        countdownStartElement.textContent = countDownToStart + "...";
-    }
 }
 
 function countdownQuiz() {
 
     countDownTimer--;
+    
+    // Set the Quiz Countdown Timer to the current time
+    timeRemainingCount.textContent = countDownTimer;
+    
     if (countDownTimer <= 0) {
-        // Stop the Countdown Timer
+        // Stop the Quiz Countdown Timer
         clearInterval(quizEndsIn);
-    }
-    else {
-        // Set the Countdown Timer to the current time
-        timeRemainingCount.textContent = countDownTimer;
     }
 }
 
