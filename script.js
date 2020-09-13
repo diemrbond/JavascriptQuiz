@@ -13,7 +13,6 @@ var countdownStartElement = document.getElementById("countdownStart");
 
 // Questions
 var questionsContainer = document.getElementById("questions");
-var theQuestionContainer = document.getElementById("theQuestion");
 
 // Correct and Incorrect Responses
 var continueButtonCorrect = document.getElementById("continueQuizCorrect");
@@ -21,10 +20,12 @@ var continueButtonIncorrect = document.getElementById("continueQuizIncorrect");
 
 // Final Scores
 var finalScoreContainer = document.getElementById("finalScore");
+var finalScoreTitleElement = document.getElementById("finalScoreTitle");
 var totalQuestionsElement = document.getElementById("totalQuestions");
 var correctElement = document.getElementById("correct");
 var incorrectElement = document.getElementById("incorrect");
 var totalScoreElement = document.getElementById("totalScore");
+var playerNameElement = document.getElementById("playerName");
 
 // Variable Declaration
 var countDownToStart = 5;
@@ -129,20 +130,34 @@ function setupQuestions() {
 // Display Next Question
 function displayNextQuestion() {
 
-    theQuestionContainer.innerHTML = "";
+    questionsContainer.innerHTML = "";
 
+    var addRow = document.createElement("div");
+    addRow.setAttribute("class", "row");
+    
     var theQuestionNumber = document.createElement("h1");
+    theQuestionNumber.setAttribute("class", "p-0");
     theQuestionNumber.textContent = "Q" + (currentQuestion + 1) + ": ";
-    theQuestionContainer.appendChild(theQuestionNumber);
+    addRow.appendChild(theQuestionNumber);
 
+    questionsContainer.appendChild(addRow);
+
+    var addRow = document.createElement("div");
+    addRow.setAttribute("class", "row");
+    
     var theQuestionText = document.createElement("h2");
     theQuestionText.textContent += quizQuestions[questionOrder[currentQuestion]].question;
-    theQuestionContainer.appendChild(theQuestionText);
+    addRow.appendChild(theQuestionText);
+
+    questionsContainer.appendChild(addRow);    
 
     var theOptions = quizQuestions[questionOrder[currentQuestion]].options;
     var theCorrect = quizQuestions[questionOrder[currentQuestion]].answer;
 
     for (var i = 0; i < theOptions.length; i++) {
+
+        var addRow = document.createElement("div");
+        addRow.setAttribute("class", "row");
 
         var theDiv = document.createElement("div");
         theDiv.setAttribute("class", "theOptions");
@@ -160,7 +175,9 @@ function displayNextQuestion() {
         thisButton.textContent = theOptions[i];
 
         theDiv.appendChild(thisButton);
-        theQuestionContainer.appendChild(theDiv);
+        addRow.appendChild(theDiv);
+
+        questionsContainer.appendChild(addRow);    
     }
 
 }
@@ -177,6 +194,7 @@ function checkCorrect(which) {
 
         if (countDownTimer <= 0) {
             // Brings up the Final Screen
+            finalScoreTitleElement.textContent = "You ran out of time!";
             finalScreen();
         }
     }
@@ -193,6 +211,7 @@ function checkQuizEnd() {
     }
     else {
         // Brings up the Final Screen
+        finalScoreTitleElement.textContent = "Congratulations!";
         finalScreen();
     }
 
@@ -206,7 +225,7 @@ function finalScreen() {
     timeRemainingElement.style.display = "none";
 
     var questionsAnswered = myCorrect + myIncorrect;
-    var yourScore = (myCorrect * 3) - (myIncorrect * 2);
+    var yourScore = (myCorrect * 3) - (myIncorrect * 2) + countDownTimer;
 
     totalQuestionsElement.textContent = questionsAnswered;
     correctElement.textContent = myCorrect;
@@ -241,6 +260,7 @@ function countdownQuiz() {
 
     if (countDownTimer <= 0) {
         // Brings up the Final Screen
+        finalScoreTitleElement.textContent = "You ran out of time!";
         finalScreen();
     }
 }
@@ -273,12 +293,19 @@ startButton.addEventListener("click", startQuiz);
 continueButtonCorrect.addEventListener("click", checkQuizEnd);
 continueButtonIncorrect.addEventListener("click", checkQuizEnd);
 
-theQuestionContainer.addEventListener("click", function (event) {
+questionsContainer.addEventListener("click", function (event) {
 
     event.preventDefault();
 
     if (event.target.matches("button")) {
         var myNum = event.target.getAttribute("data-index");
         checkCorrect(myNum);
+    }
+})
+
+playerNameElement.addEventListener("keydown", function(event){
+
+    if (event.key == "Enter"){
+        event.preventDefault();
     }
 })

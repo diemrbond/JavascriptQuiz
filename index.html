@@ -36,7 +36,7 @@
     <section class="container text-left" id="startScreen">
         <!-- Header -->
         <div class="row">
-            <h1 class="col-12">Are you smarter than a Javascript Coder?</h1>
+            <h1 class="col-12 p-0">Are you smarter than a Javascript Coder?</h1>
         </div>
         <!-- Instructions -->
         <div class="row">
@@ -57,25 +57,32 @@
     </section>
 
     <!-- Questions -->
-    <section class="container text-left" id="questions">
-        <div class="row">
-            <h2 class="col-12" id="theQuestion"></h2>
-        </div>
-    </section>
+    <section class="container text-left" id="questions"></section>
 
     <!-- Final Score -->
     <section class="container text-left" id="finalScore">
         <div class="row">
-            <h1 class="col-12">Congratulations!</h1>
+            <h1 class="col-12 p-0" id="finalScoreTitle">Congratulations!</h1>
         </div>
         <div class="row">
-            <div class="col-12 instructions">
+            <div class="col-12 instructions pb-0">
                 <p>You answered <span id="totalQuestions"></span> questions with:</p>
                 <ul>
                     <li><span id="correct"></span> questions correct</li>
                     <li><span id="incorrect"></span> questions incorrect</li>
                 </ul>
                 <p>For a total score of: <span id="totalScore"></span></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 instructions p-2">
+                <form>
+                    <div class="form-group">
+                        <label for="playerName">Please enter your name for our highscore table:</label>
+                        <input type="text" class="form-control" id="playerName" placeholder="Enter your name">
+                    </div>
+                </form>
             </div>
         </div>
         <div class="row">
@@ -86,8 +93,8 @@
     </section>
 
     <!-- Correct Response -->
-    <div class="modal fade" id="correctResponse" tabindex="-1" role="dialog"
-        aria-labelledby="correctResponseTitle" aria-hidden="true">
+    <div class="modal fade" id="correctResponse" tabindex="-1" role="dialog" aria-labelledby="correctResponseTitle"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -100,15 +107,16 @@
                     Well done, you answered this question correctly!
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="continueQuizCorrect" data-dismiss="modal">Continue</button>
+                    <button type="button" class="btn btn-success" id="continueQuizCorrect"
+                        data-dismiss="modal">Continue</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Incorrect Response -->
-    <div class="modal fade" id="incorrectResponse" tabindex="-1" role="dialog"
-        aria-labelledby="incorrectResponseTitle" aria-hidden="true">
+    <div class="modal fade" id="incorrectResponse" tabindex="-1" role="dialog" aria-labelledby="incorrectResponseTitle"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -121,7 +129,8 @@
                     Sorry, you answered this question incorrectly!
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="continueQuizIncorrect" data-dismiss="modal">Continue</button>
+                    <button type="button" class="btn btn-danger" id="continueQuizIncorrect"
+                        data-dismiss="modal">Continue</button>
                 </div>
             </div>
         </div>
