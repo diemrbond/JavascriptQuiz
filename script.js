@@ -47,7 +47,7 @@ var quizEndsIn;
 
 // Initial State
 function init() {
-
+    
     // Check for highscores
     var highScores = localStorage.getItem("game_highscores");
 
@@ -58,6 +58,7 @@ function init() {
 
     // Hide the time remaining element on the instruction screen
     timeRemainingElement.style.display = "none";
+    highscoresButton.style.display = "";
 
     // Show the Start Screen
     hideUnhide(startScreenContainer);
@@ -66,7 +67,7 @@ function init() {
 // Start Quiz
 function startQuiz() {
 
-    event.preventDefault();
+    highscoresButton.style.display = "none";
 
     // Show the Countdown Timer
     hideUnhide(countdownContainer);
@@ -148,9 +149,8 @@ function displayNextQuestion() {
 
     var addRow = document.createElement("div");
     addRow.setAttribute("class", "row");
-    
+
     var theQuestionNumber = document.createElement("h1");
-    theQuestionNumber.setAttribute("class", "p-0");
     theQuestionNumber.textContent = "Q" + (currentQuestion + 1) + ": ";
     addRow.appendChild(theQuestionNumber);
 
@@ -158,12 +158,12 @@ function displayNextQuestion() {
 
     var addRow = document.createElement("div");
     addRow.setAttribute("class", "row");
-    
+
     var theQuestionText = document.createElement("h2");
     theQuestionText.textContent += quizQuestions[questionOrder[currentQuestion]].question;
     addRow.appendChild(theQuestionText);
 
-    questionsContainer.appendChild(addRow);    
+    questionsContainer.appendChild(addRow);
 
     var theOptions = quizQuestions[questionOrder[currentQuestion]].options;
     var theCorrect = quizQuestions[questionOrder[currentQuestion]].answer;
@@ -191,7 +191,7 @@ function displayNextQuestion() {
         theDiv.appendChild(thisButton);
         addRow.appendChild(theDiv);
 
-        questionsContainer.appendChild(addRow);    
+        questionsContainer.appendChild(addRow);
     }
 
 }
@@ -234,6 +234,8 @@ function checkQuizEnd() {
 // Final Screen Function
 function finalScreen() {
 
+    highscoresButton.style.display = "";
+
     // Stop the Quiz Countdown Timer
     clearInterval(quizEndsIn);
     timeRemainingElement.style.display = "none";
@@ -241,7 +243,7 @@ function finalScreen() {
     var questionsAnswered = myCorrect + myIncorrect;
     playerScore = (myCorrect * 3) - (myIncorrect * 2) + countDownTimer;
 
-    if (playerScore < 0){
+    if (playerScore < 0) {
         playerScore = 0;
     }
 
@@ -283,12 +285,12 @@ function countdownQuiz() {
     }
 }
 
-function submitHighscore(){
+function submitHighscore() {
 
     var thisPlayer = playerNameElement.value.trim();
-    if (thisPlayer.length > 0){
-        
-        player_highScores.push([thisPlayer,playerScore]);
+    if (thisPlayer.length > 0) {
+
+        player_highScores.push([thisPlayer, playerScore]);
 
         var theHighscores = JSON.stringify(player_highScores);
         localStorage.setItem("game_highscores", theHighscores);
@@ -301,49 +303,117 @@ function submitHighscore(){
     }
 }
 
-function viewHighscores(){
+function resetHighscores() {
+
+    player_highScores = [];
+
+    var theHighscores = JSON.stringify(player_highScores);
+    localStorage.setItem("game_highscores", theHighscores);
+
+    errorElement.innerHTML = "";
+    viewHighscores();
+}
+
+function viewHighscores() {
+
+    highscoresButton.style.display = "none";
 
     var tempArray = [];
     var tempArrayScores = [];
     var tempScoresInOrder = [];
 
-    for (var i=0; i<player_highScores.length; i++){
+    for (var i = 0; i < player_highScores.length; i++) {
         tempArray.push(i);
         tempArrayScores.push(player_highScores[i][1]);
-    }    
+    }
 
     do {
         var theIndex = indexOfMax(tempArrayScores);
         tempScoresInOrder.push(tempArray[theIndex]);
-        tempArray.splice(theIndex,1);
-        tempArrayScores.splice(theIndex,1);
+        tempArray.splice(theIndex, 1);
+        tempArrayScores.splice(theIndex, 1);
     }
     while (tempArray.length > 0);
 
-    // Display the top 10 scores
-    for (var j=0; j<10; j++){
-        
-        if (player_highScores[tempScoresInOrder[j]] != undefined){
-            var addRow = document.createElement("div");
-            addRow.setAttribute("class", "row instructions");
-            
-            var thePlayerName = document.createElement("div");
-            thePlayerName.setAttribute("class", "col-6");
-            thePlayerName.textContent = player_highScores[tempScoresInOrder[j]][0];
-            addRow.appendChild(thePlayerName);
-            
-            var thePlayerScore = document.createElement("div");
-            thePlayerScore.setAttribute("class", "col-6");
-            thePlayerScore.textContent = player_highScores[tempScoresInOrder[j]][1];
-            addRow.appendChild(thePlayerScore);
-        
-            highscoreTableContainer.appendChild(addRow); 
-        }
-        else {
-            break;
-        } 
+    highscoreTableContainer.innerHTML = "";
+
+    var addRow = document.createElement("div");
+    addRow.setAttribute("class", "row");
+
+    var theHeading = document.createElement("h1");
+    theHeading.setAttribute("class", "col-12");
+    theHeading.textContent = "Highscores!";
+    addRow.appendChild(theHeading);
+
+    highscoreTableContainer.appendChild(addRow);
+
+    if (player_highScores.length == 0) {
+
+        var addRow = document.createElement("div");
+        addRow.setAttribute("class", "row instructions");
+
+        var thePlayerName = document.createElement("div");
+        thePlayerName.setAttribute("class", "col-12");
+        thePlayerName.textContent = "No highscores have been set!";
+        addRow.appendChild(thePlayerName);
+
+        highscoreTableContainer.appendChild(addRow);
     }
-    
+    else {
+        // Display the top 10 scores
+        for (var j = 0; j < 10; j++) {
+
+            if (player_highScores[tempScoresInOrder[j]] != undefined) {
+                var addRow = document.createElement("div");
+                addRow.setAttribute("class", "row instructions");
+
+                var addDiv = document.createElement("div");
+                addDiv.setAttribute("class", "col-12");
+
+                var thePlayerScore = document.createElement("span");
+                thePlayerScore.setAttribute("class", "playerscores");
+                thePlayerScore.textContent = player_highScores[tempScoresInOrder[j]][1];
+                addDiv.appendChild(thePlayerScore);
+
+                var thePlayerName = document.createElement("span");
+                thePlayerName.textContent = player_highScores[tempScoresInOrder[j]][0];
+                thePlayerName.setAttribute("style", "line-height: 1.3")
+                addDiv.appendChild(thePlayerName);
+
+                addRow.appendChild(addDiv);
+                highscoreTableContainer.appendChild(addRow);
+            }
+            else {
+                break;
+            }
+        }
+
+    }
+
+    var addRow = document.createElement("div");
+    addRow.setAttribute("class", "row");
+
+    var theDiv = document.createElement("div");
+    theDiv.setAttribute("class", "col-12 mt-2");
+
+    var thisButton = document.createElement("button");
+    thisButton.setAttribute("class", "btn-primary btn-lg");
+    thisButton.textContent = "Go Back";
+    thisButton.addEventListener("click", init);
+
+    theDiv.appendChild(thisButton);
+
+    var resetButton = document.createElement("button");
+    resetButton.setAttribute("class", "btn-secondary btn-lg ml-3");
+    resetButton.textContent = "Reset Highscores";
+    resetButton.addEventListener("click", resetHighscores)
+
+    theDiv.appendChild(resetButton);
+
+    addRow.appendChild(theDiv);
+
+    highscoreTableContainer.appendChild(addRow);
+
     hideUnhide(highscoreTableContainer);
 
 }
@@ -381,6 +451,8 @@ function hideUnhide(which) {
     // Hide the Final Score
     finalScoreContainer.style.display = "none";
 
+    highscoreTableContainer.style.display = "none";
+
     // Unhide the Required Container
     which.style.display = "block";
 
@@ -405,9 +477,9 @@ questionsContainer.addEventListener("click", function (event) {
     }
 })
 
-playerNameElement.addEventListener("keydown", function(event){
+playerNameElement.addEventListener("keydown", function (event) {
 
-    if (event.key == "Enter"){
+    if (event.key == "Enter") {
         event.preventDefault();
         submitHighscore();
     }

@@ -6,6 +6,14 @@ h1 {
     font-family: 'Press Start 2P', cursive;
 }
 
+.playerscores {
+    font-family: 'Press Start 2P', cursive;
+    padding-right: 30px;
+    font-size: 1.2em;
+    top: 7px;
+    position: relative;
+}
+
 h2 {
     margin-bottom: 20px;
 }
@@ -24,6 +32,9 @@ h2 {
     color: red;
 }
 
+nav {
+    min-height: 66px;
+}
 /* Set Initial States to Hidden */
 #timeRemaining, #countdown, #questions, #finalScore, #highscoreTable {
     display: none;
