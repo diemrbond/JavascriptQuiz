@@ -28,7 +28,7 @@ nav {
 
 body {
     /* Image available for free from https://hipwallpaper.com/question-mark-backgrounds */
-    background-image: url('./assets/images/question_marks.jpg');
+    background-image: url('../images/question_marks.jpg');
     background-size: cover;
 }
 
