@@ -8,7 +8,7 @@ UWA Project, Week 4
 ![picture](./assets/images/Screenshot5.PNG)
 
 ## Project Description
-For this project we needed to create a quiz on JavaScript that stores highscores to the localStorage, allows the user to reset the scores and compare their score to the top scores.
+For this project we needed to create a timed quiz on JavaScript that stores highscores to the localStorage, allows the user to reset the scores and compare their score to the top scores.
 
 The main goal was:
 ```
