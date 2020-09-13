@@ -20,8 +20,12 @@ h2 {
     padding-top: 10px;
 }
 
+#error {
+    color: red;
+}
+
 /* Set Initial States to Hidden */
-#timeRemaining, #countdown, #questions, #finalScore {
+#timeRemaining, #countdown, #questions, #finalScore, #highscoreTable {
     display: none;
 }
 

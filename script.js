@@ -2,6 +2,8 @@
 // Time Area
 var timeRemainingElement = document.getElementById("timeRemaining");
 var timeRemainingCount = document.getElementById("timeCount");
+var highscoresButton = document.getElementById("highscores");
+var highscoreTableContainer = document.getElementById("highscoreTable");
 
 // Start Screen
 var startScreenContainer = document.getElementById("startScreen");
@@ -26,6 +28,7 @@ var correctElement = document.getElementById("correct");
 var incorrectElement = document.getElementById("incorrect");
 var totalScoreElement = document.getElementById("totalScore");
 var playerNameElement = document.getElementById("playerName");
+var errorElement = document.getElementById("error");
 
 // Variable Declaration
 var countDownToStart = 5;
@@ -35,6 +38,8 @@ var totalQuestions = Object.entries(quizQuestions).length;
 var questionOrder = [];
 var myCorrect = 0;
 var myIncorrect = 0;
+var playerScore = 0;
+var player_highScores = [];
 
 // Timer Declaration
 var startQuizIn;
@@ -42,6 +47,15 @@ var quizEndsIn;
 
 // Initial State
 function init() {
+
+    // Check for highscores
+    var highScores = localStorage.getItem("game_highscores");
+
+    //   * Check if the todos were retrieved from `localStorage` and if so, set a `todos` variable with the `storedTodos`.
+    if (highScores != null) {
+        player_highScores = JSON.parse(highScores);
+    }
+    console.log(player_highScores);
 
     // Hide the time remaining element on the instruction screen
     timeRemainingElement.style.display = "none";
@@ -65,6 +79,7 @@ function startQuiz() {
     // Reset Scores    
     myCorrect = 0;
     myIncorrect = 0;
+    playerScore = 0;
 
     // Start Countdown Timer
     countdownStartElement.textContent = countDownToStart + "...";
@@ -225,12 +240,16 @@ function finalScreen() {
     timeRemainingElement.style.display = "none";
 
     var questionsAnswered = myCorrect + myIncorrect;
-    var yourScore = (myCorrect * 3) - (myIncorrect * 2) + countDownTimer;
+    playerScore = (myCorrect * 3) - (myIncorrect * 2) + countDownTimer;
+
+    if (playerScore < 0){
+        playerScore = 0;
+    }
 
     totalQuestionsElement.textContent = questionsAnswered;
     correctElement.textContent = myCorrect;
     incorrectElement.textContent = myIncorrect;
-    totalScoreElement.textContent = yourScore;
+    totalScoreElement.textContent = playerScore;
 
     hideUnhide(finalScoreContainer);
 }
@@ -265,6 +284,30 @@ function countdownQuiz() {
     }
 }
 
+function submitHighscore(){
+
+    var thisPlayer = playerNameElement.value.trim();
+    if (thisPlayer.length > 0){
+        
+        player_highScores.push([thisPlayer,playerScore]);
+
+        var theHighscores = JSON.stringify(player_highScores);
+        localStorage.setItem("game_highscores", theHighscores);
+
+        errorElement.innerHTML = "";
+        viewHighscores();
+    }
+    else {
+        errorElement.innerHTML = "<br/>Please enter a valid name.";
+    }
+}
+
+function viewHighscores(){
+
+    hideUnhide(highscoreTableContainer);
+
+}
+
 // Hide / Unhide Elements
 function hideUnhide(which) {
 
@@ -292,6 +335,7 @@ init();
 startButton.addEventListener("click", startQuiz);
 continueButtonCorrect.addEventListener("click", checkQuizEnd);
 continueButtonIncorrect.addEventListener("click", checkQuizEnd);
+highscoresButton.addEventListener("click", viewHighscores);
 
 questionsContainer.addEventListener("click", function (event) {
 
@@ -307,5 +351,7 @@ playerNameElement.addEventListener("keydown", function(event){
 
     if (event.key == "Enter"){
         event.preventDefault();
+        submitHighscore();
     }
 })
+submitScore.addEventListener("click", submitHighscore);
