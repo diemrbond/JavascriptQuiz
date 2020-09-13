@@ -6,6 +6,7 @@ var timeRemainingCount = document.getElementById("timeCount");
 // Highscore Elements
 var highscoresButton = document.getElementById("highscores");
 var highscoreTableContainer = document.getElementById("highscoreTable");
+var resetTheScoresButton = document.getElementById("resetTheScores");
 
 // Start Screen
 var startScreenContainer = document.getElementById("startScreen");
@@ -217,9 +218,11 @@ function displayNextQuestion() {
         optionsOrder.push(i);
     }
 
-    // Shuffle the options order
-    var tempArray = shuffle(optionsOrder);
-    optionsOrder = tempArray;
+    // Shuffle the options order if not a true/false
+    if (theOptions[0] != "True" && theOptions[0] != "False"){
+        var tempArray = shuffle(optionsOrder);
+        optionsOrder = tempArray;
+    }
 
     // Loop through the number of options
     for (var i = 0; i < theOptions.length; i++) {
@@ -519,11 +522,19 @@ function viewHighscores() {
 
     // Add the "reset highscores" button
     var resetButton = document.createElement("button");
+    // Attributes to control the modal
+    resetButton.setAttribute("data-toggle", "modal");
+    resetButton.setAttribute("data-backdrop", "static");
+    resetButton.setAttribute("data-keyboard", "false");
+    // Calls the reset message modal
+    resetButton.setAttribute("data-target", "#checkReset");
+    // Set button information
     resetButton.setAttribute("class", "btn-secondary btn-lg ml-3");
     resetButton.textContent = "Reset Highscores";
-    resetButton.addEventListener("click", resetHighscores)
-    theDiv.appendChild(resetButton);
 
+    // resetButton.addEventListener("click", resetHighscores)
+    theDiv.appendChild(resetButton);
+    
     // Add the buttons to the row
     addRow3.appendChild(theDiv);
 
@@ -622,6 +633,7 @@ function hideUnhide(which) {
     // Hide the Final Score
     finalScoreContainer.style.display = "none";
 
+    // Hide the High Score Table
     highscoreTableContainer.style.display = "none";
 
     // Unhide the Required Container
@@ -639,6 +651,8 @@ continueButtonCorrect.addEventListener("click", checkQuizEnd);
 continueButtonIncorrect.addEventListener("click", checkQuizEnd);
 highscoresButton.addEventListener("click", viewHighscores);
 submitScore.addEventListener("click", submitHighscore);
+dontSubmit.addEventListener("click", init);
+resetTheScoresButton.addEventListener("click", resetHighscores);
 
 // Loop through all buttons in a question area
 questionsContainer.addEventListener("click", function (event) {

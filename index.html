@@ -102,6 +102,7 @@
         <div class="row">
             <div class="col-12 p-2">
                 <button id="submitScore" class="btn-primary btn-lg">Submit Highscore</button>
+                <button id="dontSubmit" class="btn-secondary btn-lg ml-3">Go Back</button>
             </div>
         </div>
     </section>
@@ -133,8 +134,8 @@
 
     <!-- Incorrect Response -->
     <!-- Modal for displaying an incorrect response -->
-    <div class="modal fade p-5" id="incorrectResponse" tabindex="-1" role="dialog" aria-labelledby="incorrectResponseTitle"
-        aria-hidden="true">
+    <div class="modal fade p-5" id="incorrectResponse" tabindex="-1" role="dialog"
+        aria-labelledby="incorrectResponseTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -147,6 +148,29 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="continueQuizIncorrect"
                         data-dismiss="modal">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Reset Scores -->
+    <!-- Modal for checking confirmation -->
+    <div class="modal fade p-5" id="checkReset" tabindex="-1" role="dialog" aria-labelledby="checkResetTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="checkResetTitle">Are you sure you want to reset the highscores?</h5>
+                </div>
+                <div class="modal-body">
+                    I mean, it's a pretty dirty move!
+                </div>
+                <!-- Button to continue to next question / end of quiz -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="resetTheScores"
+                        data-dismiss="modal">Reset Highscores</button>
+                    <button type="button" class="btn btn-secondary" id="cancelReset"
+                        data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
