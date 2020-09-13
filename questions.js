@@ -79,4 +79,11 @@ var quizQuestions = {
         "answer": 2
     }
 
+    9: {
+        "question": "JavaScript is the same as Java.",
+        "options": ["True",
+            "False"],
+        "answer": 1
+    }
+
 }
