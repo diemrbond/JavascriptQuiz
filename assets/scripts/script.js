@@ -292,7 +292,8 @@ function checkQuizEnd() {
     }
     else {
         // Otherwise, show the Final Screen
-        console.log("timedOut: "+timedOut);
+        // Make sure the final screen has the correct text, if timed out or not
+        console.log("[SYSTEM] timedOut: " + timedOut);
         if (timedOut) {
             finalScoreTitleElement.textContent = "You ran out of time!";
         }
@@ -551,7 +552,7 @@ function indexOfMax(which) {
 function countdownStart() {
 
     // Console logs
-    console.log("[SYSTEM] countdownStart("+countDownToStart+")");
+    console.log("[SYSTEM] countdownStart(" + countDownToStart + ")");
 
     // Remove 1 second
     countDownToStart--;

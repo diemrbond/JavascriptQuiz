@@ -1,12 +1,20 @@
 /* Allow space for the navbar */
+
 .container {
     margin-top: 100px;
 }
 
 /* Page elements */
+
 h1 {
     /* Styling for the custom font */
     font-family: 'Press Start 2P', cursive;
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 1.65em;
+    }
 }
 
 h2 {
@@ -24,7 +32,12 @@ body {
     background-size: cover;
 }
 
+button {
+    text-align: left;
+}
+
 /* Custom classes */
+
 .playerscores {
     font-family: 'Press Start 2P', cursive;
     font-size: 1.2em;
@@ -44,12 +57,14 @@ body {
 }
 
 /* Custom IDs */
+
 #error {
     /* Sets the font colour for the player name error message */
     color: red;
 }
 
 /* Set Initial States to Hidden on Page Load (removes flash) */
+
 #timeRemaining, #countdown, #questions, #finalScore, #highscoreTable {
     display: none;
 }

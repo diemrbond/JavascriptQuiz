@@ -12,7 +12,7 @@
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
     <!-- Custom Stylesheets -->
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <!-- <link href="https://fonts.googleapis.com/css2?family=Geostar+Fill&display=swap" rel="stylesheet"> -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
@@ -35,7 +35,7 @@
     </nav>
 
     <!-- Main Body Section -->
-    <section class="container text-left" id="startScreen">
+    <section class="container text-left p-5" id="startScreen">
         <!-- Header -->
         <div class="row">
             <h1 class="col-12">Are you smarter than a JavaScript Coder?</h1>
@@ -70,11 +70,11 @@
 
     <!-- Questions -->
     <!-- Data to be populated by script.js -->
-    <section class="container text-left" id="questions"></section>
+    <section class="container text-left p-5" id="questions"></section>
 
     <!-- Final Score -->
     <!-- Data to be populated by script.js -->
-    <section class="container text-left" id="finalScore">
+    <section class="container text-left p-5" id="finalScore">
         <div class="row">
             <h1 class="col-12" id="finalScoreTitle">Congratulations!</h1>
         </div>
@@ -108,11 +108,11 @@
 
     <!-- Highscores -->
     <!-- Data to be populated by script.js -->
-    <section class="container text-left" id="highscoreTable"></section>
+    <section class="container text-left p-5" id="highscoreTable"></section>
 
     <!-- Correct Response -->
     <!-- Modal for displaying a correct response -->
-    <div class="modal fade" id="correctResponse" tabindex="-1" role="dialog" aria-labelledby="correctResponseTitle"
+    <div class="modal fade p-5" id="correctResponse" tabindex="-1" role="dialog" aria-labelledby="correctResponseTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -133,7 +133,7 @@
 
     <!-- Incorrect Response -->
     <!-- Modal for displaying an incorrect response -->
-    <div class="modal fade" id="incorrectResponse" tabindex="-1" role="dialog" aria-labelledby="incorrectResponseTitle"
+    <div class="modal fade p-5" id="incorrectResponse" tabindex="-1" role="dialog" aria-labelledby="incorrectResponseTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -153,8 +153,8 @@
     </div>
 
     <!-- Javascript Code  -->
-    <script src="./questions.js"></script>
-    <script src="./script.js"></script>
+    <script src="./assets/scripts/questions.js"></script>
+    <script src="./assets/scripts/script.js"></script>
 
     <!-- Bootstrap Components -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
