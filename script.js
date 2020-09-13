@@ -55,7 +55,6 @@ function init() {
     if (highScores != null) {
         player_highScores = JSON.parse(highScores);
     }
-    console.log(player_highScores);
 
     // Hide the time remaining element on the instruction screen
     timeRemainingElement.style.display = "none";
@@ -304,8 +303,67 @@ function submitHighscore(){
 
 function viewHighscores(){
 
+    var tempArray = [];
+    var tempArrayScores = [];
+    var tempScoresInOrder = [];
+
+    for (var i=0; i<player_highScores.length; i++){
+        tempArray.push(i);
+        tempArrayScores.push(player_highScores[i][1]);
+    }    
+
+    do {
+        var theIndex = indexOfMax(tempArrayScores);
+        tempScoresInOrder.push(tempArray[theIndex]);
+        tempArray.splice(theIndex,1);
+        tempArrayScores.splice(theIndex,1);
+    }
+    while (tempArray.length > 0);
+
+    // Display the top 10 scores
+    for (var j=0; j<10; j++){
+        
+        if (player_highScores[tempScoresInOrder[j]] != undefined){
+            var addRow = document.createElement("div");
+            addRow.setAttribute("class", "row instructions");
+            
+            var thePlayerName = document.createElement("div");
+            thePlayerName.setAttribute("class", "col-6");
+            thePlayerName.textContent = player_highScores[tempScoresInOrder[j]][0];
+            addRow.appendChild(thePlayerName);
+            
+            var thePlayerScore = document.createElement("div");
+            thePlayerScore.setAttribute("class", "col-6");
+            thePlayerScore.textContent = player_highScores[tempScoresInOrder[j]][1];
+            addRow.appendChild(thePlayerScore);
+        
+            highscoreTableContainer.appendChild(addRow); 
+        }
+        else {
+            break;
+        } 
+    }
+    
     hideUnhide(highscoreTableContainer);
 
+}
+
+function indexOfMax(which) {
+    if (which.length === 0) {
+        return -1;
+    }
+
+    var max = which[0];
+    var maxIndex = 0;
+
+    for (var i = 1; i < which.length; i++) {
+        if (which[i] > max) {
+            maxIndex = i;
+            max = which[i];
+        }
+    }
+
+    return maxIndex;
 }
 
 // Hide / Unhide Elements
