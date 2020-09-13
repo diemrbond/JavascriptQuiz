@@ -77,7 +77,7 @@ var quizQuestions = {
             "var colors = ['red', 'green', 'blue']",
             "var colors = 1 = ('red'), 2 = ('green'), 3 = ('blue')"],
         "answer": 2
-    }
+    },
 
     9: {
         "question": "JavaScript is the same as Java.",

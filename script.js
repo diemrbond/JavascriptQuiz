@@ -42,6 +42,7 @@ var myCorrect = 0;
 var myIncorrect = 0;
 var playerScore = 0;
 var player_highScores = [];
+var timedOut = false;
 
 // Timer Declaration
 var startQuizIn;
@@ -50,6 +51,9 @@ var quizEndsIn;
 // Functions
 // Return Page to Initial State
 function init() {
+
+    // Console logs
+    console.log("[SYSTEM] init()");
 
     // Check for highscores from Local Storage
     var highScores = localStorage.getItem("game_highscores");
@@ -72,6 +76,9 @@ function init() {
 // Start Quiz
 function startQuiz() {
 
+    // Console logs
+    console.log("[SYSTEM] startQuiz()");
+
     // Hide the view highscores button
     highscoresButton.style.display = "none";
 
@@ -82,18 +89,24 @@ function startQuiz() {
     countDownToStart = 5;
     countDownTimer = 60;
 
-    // Reset Scores    
+    // Reset Variables    
+    questionOrder = [];
     myCorrect = 0;
     myIncorrect = 0;
     playerScore = 0;
+    currentQuestion = 0;
+    timedOut = false;
 
     // Start Countdown Timer
-    countdownStartElement.textContent = countDownToStart + "...";
+    countdownStartElement.innerHTML = "Get ready<br/>" + countDownToStart + "...";
     startQuizIn = setInterval(countdownStart, 1000);
 }
 
 // Load Questions
 function loadQuestionsContainer() {
+
+    // Console logs
+    console.log("[SYSTEM] loadQuestionsContainer()");
 
     // Show the Quiz Timer
     timeRemainingCount.textContent = countDownTimer;
@@ -116,6 +129,9 @@ function loadQuestionsContainer() {
 // Array Shuffle (Used to shuffle questions)
 function shuffle(which) {
 
+    // Console logs
+    console.log("[SYSTEM] shuffle(" + which + ")");
+
     // Creates copies of the original array
     var originalArray = which;
     var newArray = [];
@@ -132,11 +148,15 @@ function shuffle(which) {
     }
 
     // Return the new array order
+    console.log(" - " + newArray)
     return newArray;
 }
 
 // Sets up the Questions Order
 function setupQuestions() {
+
+    // Console logs
+    console.log("[SYSTEM] setupQuestions()");
 
     // Add the total amount of questions
     for (var i = 0; i < totalQuestions; i++) {
@@ -151,6 +171,10 @@ function setupQuestions() {
 
 // Display Next Question
 function displayNextQuestion() {
+
+    // Console logs
+    console.log("[SYSTEM] displayNextQuestion()");
+    console.log("---------");
 
     // Reset the question to remove previous
     questionsContainer.innerHTML = "";
@@ -174,6 +198,9 @@ function displayNextQuestion() {
     theQuestionText.textContent += quizQuestions[questionOrder[currentQuestion]].question;
     addRow2.appendChild(theQuestionText);
     questionsContainer.appendChild(addRow2);
+
+    // Log the question to the console
+    console.log("Q" + (currentQuestion + 1) + ": " + quizQuestions[questionOrder[currentQuestion]].question)
 
     // Retrieve the options and correct answer for this question
     var theOptions = quizQuestions[questionOrder[currentQuestion]].options;
@@ -211,6 +238,9 @@ function displayNextQuestion() {
         thisButton.setAttribute("class", "btn-primary btn-lg");
         thisButton.textContent = theOptions[i];
 
+        // Log the option to the console
+        console.log(theOptions[i]);
+
         // Add the button to the div, the div to the row
         theDiv.appendChild(thisButton);
         addRowQ.appendChild(theDiv);
@@ -218,10 +248,16 @@ function displayNextQuestion() {
         // Add the row to the container
         questionsContainer.appendChild(addRowQ);
     }
+
+    // Divide the console logs
+    console.log("---------");
 }
 
 // Check answer is correct or incorrect
 function checkCorrect(which) {
+
+    // Console logs
+    console.log("[SYSTEM] checkCorrect()");
 
     // If the question is correct, increment the total correct
     if (quizQuestions[questionOrder[currentQuestion]].answer == which) {
@@ -234,6 +270,7 @@ function checkCorrect(which) {
 
         // If you've now run out of time, show the final screen
         if (countDownTimer <= 0) {
+            timedOut = true;
             finalScoreTitleElement.textContent = "You ran out of time!";
             finalScreen();
         }
@@ -242,6 +279,9 @@ function checkCorrect(which) {
 
 // Check if that was the final question
 function checkQuizEnd() {
+
+    // Console logs
+    console.log("[SYSTEM] checkQuizEnd()");
 
     // Increment the current question
     currentQuestion++;
@@ -252,7 +292,13 @@ function checkQuizEnd() {
     }
     else {
         // Otherwise, show the Final Screen
-        finalScoreTitleElement.textContent = "Congratulations!";
+        console.log("timedOut: "+timedOut);
+        if (timedOut) {
+            finalScoreTitleElement.textContent = "You ran out of time!";
+        }
+        else {
+            finalScoreTitleElement.textContent = "Congratulations!";
+        }
         finalScreen();
     }
 }
@@ -260,8 +306,14 @@ function checkQuizEnd() {
 // Final Screen Function
 function finalScreen() {
 
+    // Console logs
+    console.log("[SYSTEM] finalScreen()");
+
     // Show the view highscores button
     highscoresButton.style.display = "";
+
+    // Reset the input value
+    playerNameElement.value = "";
 
     // Stop the Quiz Countdown Timer and hide
     clearInterval(quizEndsIn);
@@ -288,6 +340,9 @@ function finalScreen() {
 
 // Submit a new highscore
 function submitHighscore() {
+
+    // Console logs
+    console.log("[SYSTEM] submitHighscore()");
 
     // Retrieve the players name from the input
     var thisPlayer = playerNameElement.value.trim();
@@ -317,6 +372,9 @@ function submitHighscore() {
 // Delete the highscores like a cheating punk
 function resetHighscores() {
 
+    // Console logs
+    console.log("[SYSTEM] resetHighscores()");
+
     // Reset the browsers highscores
     player_highScores = [];
 
@@ -330,6 +388,9 @@ function resetHighscores() {
 
 // Display the highscores table
 function viewHighscores() {
+
+    // Console logs
+    console.log("[SYSTEM] viewHighscores()");
 
     // Hide the view highscores button, as already there
     highscoresButton.style.display = "none";
@@ -461,6 +522,9 @@ function viewHighscores() {
 // Function to check the highest value in an array
 function indexOfMax(which) {
 
+    // Console logs
+    console.log("[SYSTEM] indexOfMax(" + which.toString() + ")");
+
     // If the array is invalid, return negative
     if (which.length === 0) {
         return -1;
@@ -486,11 +550,14 @@ function indexOfMax(which) {
 // Countdown Timers
 function countdownStart() {
 
+    // Console logs
+    console.log("[SYSTEM] countdownStart("+countDownToStart+")");
+
     // Remove 1 second
     countDownToStart--;
 
     // Set the Countdown Timer to the current time
-    countdownStartElement.textContent = countDownToStart + "...";
+    countdownStartElement.innerHTML = "Get ready<br/>" + countDownToStart + "...";
 
     // If the timer has run out
     if (countDownToStart <= 0) {
@@ -503,6 +570,9 @@ function countdownStart() {
 
 function countdownQuiz() {
 
+    // Console logs
+    console.log("[SYSTEM] countdownQuiz()");
+
     // Remove 1 second
     countDownTimer--;
 
@@ -512,6 +582,7 @@ function countdownQuiz() {
     // If the timer has run out
     if (countDownTimer <= 0) {
         // Brings up the Final Screen
+        timedOut = true;
         finalScoreTitleElement.textContent = "You ran out of time!";
         finalScreen();
     }
@@ -519,6 +590,9 @@ function countdownQuiz() {
 
 // Hide / Unhide Elements
 function hideUnhide(which) {
+
+    // Console logs
+    console.log("[SYSTEM] hideUnhide()");
 
     // Hide the Start Screen
     startScreenContainer.style.display = "none";
