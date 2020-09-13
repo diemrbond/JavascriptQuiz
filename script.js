@@ -2,6 +2,8 @@
 // Time Area
 var timeRemainingElement = document.getElementById("timeRemaining");
 var timeRemainingCount = document.getElementById("timeCount");
+
+// Highscore Elements
 var highscoresButton = document.getElementById("highscores");
 var highscoreTableContainer = document.getElementById("highscoreTable");
 
@@ -45,19 +47,22 @@ var player_highScores = [];
 var startQuizIn;
 var quizEndsIn;
 
-// Initial State
+// Functions
+// Return Page to Initial State
 function init() {
-    
-    // Check for highscores
+
+    // Check for highscores from Local Storage
     var highScores = localStorage.getItem("game_highscores");
 
-    //   * Check if the todos were retrieved from `localStorage` and if so, set a `todos` variable with the `storedTodos`.
+    // Check if the highscores were retrieved from `localStorage` and if so, set them to the player_highScores
     if (highScores != null) {
         player_highScores = JSON.parse(highScores);
     }
 
     // Hide the time remaining element on the instruction screen
     timeRemainingElement.style.display = "none";
+
+    // Show the view highscores button
     highscoresButton.style.display = "";
 
     // Show the Start Screen
@@ -67,6 +72,7 @@ function init() {
 // Start Quiz
 function startQuiz() {
 
+    // Hide the view highscores button
     highscoresButton.style.display = "none";
 
     // Show the Countdown Timer
@@ -96,20 +102,21 @@ function loadQuestionsContainer() {
     // Start Quiz Countdown Timer
     quizEndsIn = setInterval(countdownQuiz, 1000);
 
-    // Show the Questions
-    hideUnhide(questionsContainer);
-
     // Setup Question Order
     setupQuestions();
 
     // Display First Question
     displayNextQuestion();
 
+    // Show the Questions
+    hideUnhide(questionsContainer);
+
 }
 
-// Array Shuffle
+// Array Shuffle (Used to shuffle questions)
 function shuffle(which) {
 
+    // Creates copies of the original array
     var originalArray = which;
     var newArray = [];
 
@@ -145,124 +152,347 @@ function setupQuestions() {
 // Display Next Question
 function displayNextQuestion() {
 
+    // Reset the question to remove previous
     questionsContainer.innerHTML = "";
 
-    var addRow = document.createElement("div");
-    addRow.setAttribute("class", "row");
+    // Add the row
+    var addRow1 = document.createElement("div");
+    addRow1.setAttribute("class", "row");
 
+    // Add the question number
     var theQuestionNumber = document.createElement("h1");
     theQuestionNumber.textContent = "Q" + (currentQuestion + 1) + ": ";
-    addRow.appendChild(theQuestionNumber);
+    addRow1.appendChild(theQuestionNumber);
+    questionsContainer.appendChild(addRow1);
 
-    questionsContainer.appendChild(addRow);
+    // Add the next row
+    var addRow2 = document.createElement("div");
+    addRow2.setAttribute("class", "row");
 
-    var addRow = document.createElement("div");
-    addRow.setAttribute("class", "row");
-
+    // Add the question
     var theQuestionText = document.createElement("h2");
     theQuestionText.textContent += quizQuestions[questionOrder[currentQuestion]].question;
-    addRow.appendChild(theQuestionText);
+    addRow2.appendChild(theQuestionText);
+    questionsContainer.appendChild(addRow2);
 
-    questionsContainer.appendChild(addRow);
-
+    // Retrieve the options and correct answer for this question
     var theOptions = quizQuestions[questionOrder[currentQuestion]].options;
     var theCorrect = quizQuestions[questionOrder[currentQuestion]].answer;
 
+    // Loop through the number of options
     for (var i = 0; i < theOptions.length; i++) {
 
-        var addRow = document.createElement("div");
-        addRow.setAttribute("class", "row");
+        // Add the row
+        var addRowQ = document.createElement("div");
+        addRowQ.setAttribute("class", "row");
 
+        // Add the div for the option
         var theDiv = document.createElement("div");
         theDiv.setAttribute("class", "theOptions");
 
+        // Create the button for the option
         var thisButton = document.createElement("button");
+        // Set the option number
         thisButton.setAttribute("data-index", i);
+        // Attributes to control the modal
         thisButton.setAttribute("data-toggle", "modal");
+        thisButton.setAttribute("data-backdrop", "static");
+        thisButton.setAttribute("data-keyboard", "false");
+        // Check if correct or incorrect option
         if (i == theCorrect) {
+            // Calls correct modal
             thisButton.setAttribute("data-target", "#correctResponse");
         }
         else {
+            // Calls incorrect modal
             thisButton.setAttribute("data-target", "#incorrectResponse");
         }
+        // Add the button
         thisButton.setAttribute("class", "btn-primary btn-lg");
         thisButton.textContent = theOptions[i];
 
+        // Add the button to the div, the div to the row
         theDiv.appendChild(thisButton);
-        addRow.appendChild(theDiv);
+        addRowQ.appendChild(theDiv);
 
-        questionsContainer.appendChild(addRow);
+        // Add the row to the container
+        questionsContainer.appendChild(addRowQ);
     }
-
 }
 
-// Check answer is correct
+// Check answer is correct or incorrect
 function checkCorrect(which) {
 
+    // If the question is correct, increment the total correct
     if (quizQuestions[questionOrder[currentQuestion]].answer == which) {
         myCorrect++;
     }
+    // If it's incorrect, increment the total incorrect, decrease time
     else {
         myIncorrect++;
         countDownTimer -= 10;
 
+        // If you've now run out of time, show the final screen
         if (countDownTimer <= 0) {
-            // Brings up the Final Screen
             finalScoreTitleElement.textContent = "You ran out of time!";
             finalScreen();
         }
     }
-
 }
 
-// Check final question
+// Check if that was the final question
 function checkQuizEnd() {
 
+    // Increment the current question
     currentQuestion++;
 
+    // If the player still has time available and more questions, go to the next question
     if ((currentQuestion < totalQuestions) && (countDownTimer > 0)) {
         displayNextQuestion();
     }
     else {
-        // Brings up the Final Screen
+        // Otherwise, show the Final Screen
         finalScoreTitleElement.textContent = "Congratulations!";
         finalScreen();
     }
-
 }
 
 // Final Screen Function
 function finalScreen() {
 
+    // Show the view highscores button
     highscoresButton.style.display = "";
 
-    // Stop the Quiz Countdown Timer
+    // Stop the Quiz Countdown Timer and hide
     clearInterval(quizEndsIn);
     timeRemainingElement.style.display = "none";
 
+    // Check the number of questions answered and the player score
     var questionsAnswered = myCorrect + myIncorrect;
     playerScore = (myCorrect * 3) - (myIncorrect * 2) + countDownTimer;
 
+    // Prevent negative scores
     if (playerScore < 0) {
         playerScore = 0;
     }
 
+    // Set the players scores to the finalScoreContainer
     totalQuestionsElement.textContent = questionsAnswered;
     correctElement.textContent = myCorrect;
     incorrectElement.textContent = myIncorrect;
     totalScoreElement.textContent = playerScore;
 
+    // Show the finalScoreContainer
     hideUnhide(finalScoreContainer);
+}
+
+// Submit a new highscore
+function submitHighscore() {
+
+    // Retrieve the players name from the input
+    var thisPlayer = playerNameElement.value.trim();
+
+    // Check valid player name
+    if (thisPlayer.length > 0) {
+
+        // Add the player name and score to the highscore table
+        player_highScores.push([thisPlayer, playerScore]);
+
+        // Convert the highscores into JSON and add to local storage
+        var theHighscores = JSON.stringify(player_highScores);
+        localStorage.setItem("game_highscores", theHighscores);
+
+        // Clear the error element
+        errorElement.innerHTML = "";
+
+        // View the highscores
+        viewHighscores();
+    }
+    // Prompt user to enter a valid name
+    else {
+        errorElement.innerHTML = "<br/>Please enter a valid name.";
+    }
+}
+
+// Delete the highscores like a cheating punk
+function resetHighscores() {
+
+    // Reset the browsers highscores
+    player_highScores = [];
+
+    // Reset the local storage highscores
+    var theHighscores = JSON.stringify(player_highScores);
+    localStorage.setItem("game_highscores", theHighscores);
+
+    // View the now empty highscores
+    viewHighscores();
+}
+
+// Display the highscores table
+function viewHighscores() {
+
+    // Hide the view highscores button, as already there
+    highscoresButton.style.display = "none";
+
+    // Create empty arrays to sort the highscores
+    var tempArray = [];
+    var tempArrayScores = [];
+    var tempScoresInOrder = [];
+
+    // Loop through the currently stored highscores and push to temp arrayas
+    for (var i = 0; i < player_highScores.length; i++) {
+        tempArray.push(i);
+        tempArrayScores.push(player_highScores[i][1]);
+    }
+
+    // Find the highest score in the highscores and push to the temp arrays
+    // Keep looping and adding the next highest score until none left
+    do {
+        var theIndex = indexOfMax(tempArrayScores);
+        tempScoresInOrder.push(tempArray[theIndex]);
+        tempArray.splice(theIndex, 1);
+        tempArrayScores.splice(theIndex, 1);
+    }
+    while (tempArray.length > 0);
+
+    // Reset the highscore container to empty (prevents duplication)
+    highscoreTableContainer.innerHTML = "";
+
+    // Add the row
+    var addRow1 = document.createElement("div");
+    addRow1.setAttribute("class", "row");
+
+    // Add the highscores heading
+    var theHeading = document.createElement("h1");
+    theHeading.setAttribute("class", "col-12");
+    theHeading.textContent = "Highscores!";
+    addRow1.appendChild(theHeading);
+
+    // Add the row to the container
+    highscoreTableContainer.appendChild(addRow1);
+
+    // Check if there are no highscores
+    if (player_highScores.length == 0) {
+
+        // Add the row
+        var addRow2 = document.createElement("div");
+        addRow2.setAttribute("class", "row instructions");
+
+        // Add the warning of no highscores
+        var thePlayerName = document.createElement("div");
+        thePlayerName.setAttribute("class", "col-12");
+        thePlayerName.textContent = "No highscores have been set!";
+        addRow2.appendChild(thePlayerName);
+
+        // Add the row to the container
+        highscoreTableContainer.appendChild(addRow2);
+    }
+    else {
+        // Display only the top 10 scores
+        for (var j = 0; j < 10; j++) {
+
+            // Check there is a highscore at j
+            if (player_highScores[tempScoresInOrder[j]] != undefined) {
+
+                // Add the row
+                var addRow2 = document.createElement("div");
+                addRow2.setAttribute("class", "row instructions");
+
+                // Create a div
+                var addDiv = document.createElement("div");
+                addDiv.setAttribute("class", "col-12");
+
+                // Insert the players score to the table
+                var thePlayerScore = document.createElement("span");
+                thePlayerScore.setAttribute("class", "playerscores");
+                thePlayerScore.textContent = player_highScores[tempScoresInOrder[j]][1];
+                addDiv.appendChild(thePlayerScore);
+
+                // Insert the players name to the table
+                var thePlayerName = document.createElement("span");
+                thePlayerName.textContent = player_highScores[tempScoresInOrder[j]][0];
+                thePlayerName.setAttribute("style", "line-height: 1.3")
+                addDiv.appendChild(thePlayerName);
+
+                // Add the div and the row to the container
+                addRow2.appendChild(addDiv);
+                highscoreTableContainer.appendChild(addRow2);
+            }
+            // Break out of the loop as there are no more highscores to set
+            else {
+                break;
+            }
+        }
+    }
+
+    // Add a row for buttons after the table
+    var addRow3 = document.createElement("div");
+    addRow3.setAttribute("class", "row");
+
+    // Add a div to hold the buttons
+    var theDiv = document.createElement("div");
+    theDiv.setAttribute("class", "col-12 mt-2");
+
+    // Add the "go back" button
+    var thisButton = document.createElement("button");
+    thisButton.setAttribute("class", "btn-primary btn-lg");
+    thisButton.textContent = "Go Back";
+    thisButton.addEventListener("click", init);
+    theDiv.appendChild(thisButton);
+
+    // Add the "reset highscores" button
+    var resetButton = document.createElement("button");
+    resetButton.setAttribute("class", "btn-secondary btn-lg ml-3");
+    resetButton.textContent = "Reset Highscores";
+    resetButton.addEventListener("click", resetHighscores)
+    theDiv.appendChild(resetButton);
+
+    // Add the buttons to the row
+    addRow3.appendChild(theDiv);
+
+    // Add the row to the container
+    highscoreTableContainer.appendChild(addRow3);
+
+    // Show the highscoreTableContainer
+    hideUnhide(highscoreTableContainer);
+
+}
+
+// Function to check the highest value in an array
+function indexOfMax(which) {
+
+    // If the array is invalid, return negative
+    if (which.length === 0) {
+        return -1;
+    }
+
+    // Sets the default max to the first value
+    var max = which[0];
+    var maxIndex = 0;
+
+    // Loop through all the values
+    for (var i = 1; i < which.length; i++) {
+        // If the current value is highest, reset max to this value
+        if (which[i] > max) {
+            maxIndex = i;
+            max = which[i];
+        }
+    }
+
+    // Return the highest value
+    return maxIndex;
 }
 
 // Countdown Timers
 function countdownStart() {
 
+    // Remove 1 second
     countDownToStart--;
 
     // Set the Countdown Timer to the current time
     countdownStartElement.textContent = countDownToStart + "...";
 
+    // If the timer has run out
     if (countDownToStart <= 0) {
         // Stop the Countdown Timer
         clearInterval(startQuizIn);
@@ -273,167 +503,18 @@ function countdownStart() {
 
 function countdownQuiz() {
 
+    // Remove 1 second
     countDownTimer--;
 
     // Set the Quiz Countdown Timer to the current time
     timeRemainingCount.textContent = countDownTimer;
 
+    // If the timer has run out
     if (countDownTimer <= 0) {
         // Brings up the Final Screen
         finalScoreTitleElement.textContent = "You ran out of time!";
         finalScreen();
     }
-}
-
-function submitHighscore() {
-
-    var thisPlayer = playerNameElement.value.trim();
-    if (thisPlayer.length > 0) {
-
-        player_highScores.push([thisPlayer, playerScore]);
-
-        var theHighscores = JSON.stringify(player_highScores);
-        localStorage.setItem("game_highscores", theHighscores);
-
-        errorElement.innerHTML = "";
-        viewHighscores();
-    }
-    else {
-        errorElement.innerHTML = "<br/>Please enter a valid name.";
-    }
-}
-
-function resetHighscores() {
-
-    player_highScores = [];
-
-    var theHighscores = JSON.stringify(player_highScores);
-    localStorage.setItem("game_highscores", theHighscores);
-
-    errorElement.innerHTML = "";
-    viewHighscores();
-}
-
-function viewHighscores() {
-
-    highscoresButton.style.display = "none";
-
-    var tempArray = [];
-    var tempArrayScores = [];
-    var tempScoresInOrder = [];
-
-    for (var i = 0; i < player_highScores.length; i++) {
-        tempArray.push(i);
-        tempArrayScores.push(player_highScores[i][1]);
-    }
-
-    do {
-        var theIndex = indexOfMax(tempArrayScores);
-        tempScoresInOrder.push(tempArray[theIndex]);
-        tempArray.splice(theIndex, 1);
-        tempArrayScores.splice(theIndex, 1);
-    }
-    while (tempArray.length > 0);
-
-    highscoreTableContainer.innerHTML = "";
-
-    var addRow = document.createElement("div");
-    addRow.setAttribute("class", "row");
-
-    var theHeading = document.createElement("h1");
-    theHeading.setAttribute("class", "col-12");
-    theHeading.textContent = "Highscores!";
-    addRow.appendChild(theHeading);
-
-    highscoreTableContainer.appendChild(addRow);
-
-    if (player_highScores.length == 0) {
-
-        var addRow = document.createElement("div");
-        addRow.setAttribute("class", "row instructions");
-
-        var thePlayerName = document.createElement("div");
-        thePlayerName.setAttribute("class", "col-12");
-        thePlayerName.textContent = "No highscores have been set!";
-        addRow.appendChild(thePlayerName);
-
-        highscoreTableContainer.appendChild(addRow);
-    }
-    else {
-        // Display the top 10 scores
-        for (var j = 0; j < 10; j++) {
-
-            if (player_highScores[tempScoresInOrder[j]] != undefined) {
-                var addRow = document.createElement("div");
-                addRow.setAttribute("class", "row instructions");
-
-                var addDiv = document.createElement("div");
-                addDiv.setAttribute("class", "col-12");
-
-                var thePlayerScore = document.createElement("span");
-                thePlayerScore.setAttribute("class", "playerscores");
-                thePlayerScore.textContent = player_highScores[tempScoresInOrder[j]][1];
-                addDiv.appendChild(thePlayerScore);
-
-                var thePlayerName = document.createElement("span");
-                thePlayerName.textContent = player_highScores[tempScoresInOrder[j]][0];
-                thePlayerName.setAttribute("style", "line-height: 1.3")
-                addDiv.appendChild(thePlayerName);
-
-                addRow.appendChild(addDiv);
-                highscoreTableContainer.appendChild(addRow);
-            }
-            else {
-                break;
-            }
-        }
-
-    }
-
-    var addRow = document.createElement("div");
-    addRow.setAttribute("class", "row");
-
-    var theDiv = document.createElement("div");
-    theDiv.setAttribute("class", "col-12 mt-2");
-
-    var thisButton = document.createElement("button");
-    thisButton.setAttribute("class", "btn-primary btn-lg");
-    thisButton.textContent = "Go Back";
-    thisButton.addEventListener("click", init);
-
-    theDiv.appendChild(thisButton);
-
-    var resetButton = document.createElement("button");
-    resetButton.setAttribute("class", "btn-secondary btn-lg ml-3");
-    resetButton.textContent = "Reset Highscores";
-    resetButton.addEventListener("click", resetHighscores)
-
-    theDiv.appendChild(resetButton);
-
-    addRow.appendChild(theDiv);
-
-    highscoreTableContainer.appendChild(addRow);
-
-    hideUnhide(highscoreTableContainer);
-
-}
-
-function indexOfMax(which) {
-    if (which.length === 0) {
-        return -1;
-    }
-
-    var max = which[0];
-    var maxIndex = 0;
-
-    for (var i = 1; i < which.length; i++) {
-        if (which[i] > max) {
-            maxIndex = i;
-            max = which[i];
-        }
-    }
-
-    return maxIndex;
 }
 
 // Hide / Unhide Elements
@@ -462,11 +543,14 @@ function hideUnhide(which) {
 init();
 
 // Event Listeners
+// Buttons
 startButton.addEventListener("click", startQuiz);
 continueButtonCorrect.addEventListener("click", checkQuizEnd);
 continueButtonIncorrect.addEventListener("click", checkQuizEnd);
 highscoresButton.addEventListener("click", viewHighscores);
+submitScore.addEventListener("click", submitHighscore);
 
+// Loop through all buttons in a question area
 questionsContainer.addEventListener("click", function (event) {
 
     event.preventDefault();
@@ -477,6 +561,7 @@ questionsContainer.addEventListener("click", function (event) {
     }
 })
 
+// Prevent page refresh when pressing enter in the player highscore
 playerNameElement.addEventListener("keydown", function (event) {
 
     if (event.key == "Enter") {
@@ -484,4 +569,3 @@ playerNameElement.addEventListener("keydown", function (event) {
         submitHighscore();
     }
 })
-submitScore.addEventListener("click", submitHighscore);

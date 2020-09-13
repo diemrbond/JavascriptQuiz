@@ -26,8 +26,9 @@
 
     <!-- Highscores & Time Remaining Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <!-- Time Remaining Area -->
+        <!-- Navbar Brand Title -->
         <div class="navbar-brand d-none d-md-block">Are you smarter than a JavaScript Coder?</div>
+        <!-- Time Remaining Area -->
         <div class="navbar-text ml-auto" id="timeRemaining">Time Remaining: <span id="timeCount"></span></div>
         <!-- Highscores Button -->
         <button class="btn-info btn-lg ml-auto " id="highscores">View Highscores</button>
@@ -45,7 +46,7 @@
                 <p>Press START to begin the quiz, to see if you know your stuff.</p>
                 <p>How the scoring works:</p>
                 <ul>
-                    <li>You get 3 points for each correct answer.</li>
+                    <li>You gain 3 points for each correct answer.</li>
                     <li>You lose 2 points for each incorrect answer.</li>
                     <li>You lose 10 seconds of time for each incorrect answer.</li>
                     <li>You gain 1 point for each second of time remaining.</li>
@@ -60,20 +61,19 @@
     </section>
 
     <!-- Countdown to Start -->
+    <!-- Data to be populated by script.js -->
     <section class="container text-center" id="countdown">
-        <!-- Countdown -->
         <div class="row">
             <h1 class="col-12" id="countdownStart"></h1>
         </div>
     </section>
 
-    <!-- Highscores -->
-    <section class="container text-left" id="highscoreTable"></section>
-
     <!-- Questions -->
+    <!-- Data to be populated by script.js -->
     <section class="container text-left" id="questions"></section>
 
     <!-- Final Score -->
+    <!-- Data to be populated by script.js -->
     <section class="container text-left" id="finalScore">
         <div class="row">
             <h1 class="col-12" id="finalScoreTitle">Congratulations!</h1>
@@ -88,7 +88,6 @@
                 <p>For a total score of: <span id="totalScore"></span></p>
             </div>
         </div>
-
         <div class="row">
             <div class="col-12 instructions p-2">
                 <form>
@@ -107,20 +106,23 @@
         </div>
     </section>
 
+    <!-- Highscores -->
+    <!-- Data to be populated by script.js -->
+    <section class="container text-left" id="highscoreTable"></section>
+
     <!-- Correct Response -->
+    <!-- Modal for displaying a correct response -->
     <div class="modal fade" id="correctResponse" tabindex="-1" role="dialog" aria-labelledby="correctResponseTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="correctResponseTitle">Correct!</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     Well done, you answered this question correctly!
                 </div>
+                <!-- Button to continue to next question / end of quiz -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" id="continueQuizCorrect"
                         data-dismiss="modal">Continue</button>
@@ -130,19 +132,18 @@
     </div>
 
     <!-- Incorrect Response -->
+    <!-- Modal for displaying an incorrect response -->
     <div class="modal fade" id="incorrectResponse" tabindex="-1" role="dialog" aria-labelledby="incorrectResponseTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="incorrectResponseTitle">Incorrect!</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     Sorry, you answered this question incorrectly!
                 </div>
+                <!-- Button to continue to next question / end of quiz -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="continueQuizIncorrect"
                         data-dismiss="modal">Continue</button>

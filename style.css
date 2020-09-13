@@ -1,21 +1,36 @@
+/* Allow space for the navbar */
 .container {
     margin-top: 100px;
 }
 
+/* Page elements */
 h1 {
+    /* Styling for the custom font */
     font-family: 'Press Start 2P', cursive;
-}
-
-.playerscores {
-    font-family: 'Press Start 2P', cursive;
-    padding-right: 30px;
-    font-size: 1.2em;
-    top: 7px;
-    position: relative;
 }
 
 h2 {
     margin-bottom: 20px;
+}
+
+nav {
+    /* To keep the height of the navbar consistent */
+    min-height: 66px;
+}
+
+body {
+    /* Image available for free from https://hipwallpaper.com/question-mark-backgrounds */
+    background-image: url('./assets/images/question_marks.jpg');
+    background-size: cover;
+}
+
+/* Custom classes */
+.playerscores {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2em;
+    padding-right: 30px;
+    position: relative;
+    top: 7px;
 }
 
 .instructions {
@@ -28,20 +43,13 @@ h2 {
     padding-top: 10px;
 }
 
+/* Custom IDs */
 #error {
+    /* Sets the font colour for the player name error message */
     color: red;
 }
 
-nav {
-    min-height: 66px;
-}
-/* Set Initial States to Hidden */
+/* Set Initial States to Hidden on Page Load (removes flash) */
 #timeRemaining, #countdown, #questions, #finalScore, #highscoreTable {
     display: none;
-}
-
-body {
-    /* Image available for free from https://hipwallpaper.com/question-mark-backgrounds */
-    background-image: url('./assets/images/question_marks.jpg');
-    background-size: cover;
 }
