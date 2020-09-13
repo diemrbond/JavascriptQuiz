@@ -13,11 +13,14 @@ var countdownStartElement = document.getElementById("countdownStart");
 
 // Questions
 var questionsContainer = document.getElementById("questions");
+var theQuestionContainer = document.getElementById("theQuestion");
 
 // Variable Declaration
 var countDownToStart = 5;
 var countDownTimer = 60;
 var currentQuestion = 0;
+var totalQuestions = Object.entries(quizQuestions).length;
+var questionOrder = [];
 
 // Timer Declaration
 var startQuizIn;
@@ -25,8 +28,6 @@ var quizEndsIn;
 
 // Initial State
 function init() {
-
-    console.log("questions: "+quizQuestions)
 
     // Hide the time remaining element on the instruction screen
     timeRemainingElement.style.display = "none";
@@ -51,8 +52,8 @@ function startQuiz() {
 }
 
 // Load Questions
-function loadQuestions() {
-    
+function loadQuestionsContainer() {
+
     // Show the Quiz Timer
     timeRemainingCount.textContent = countDownTimer;
     timeRemainingElement.style.display = "block";
@@ -62,32 +63,98 @@ function loadQuestions() {
 
     // Show the Questions
     hideUnhide(questionsContainer);
+
+    // Setup Question Order
+    setupQuestions();
+
+    // Display First Question
+    displayNextQuestion();
+
+}
+
+// Array Shuffle
+function shuffle(which) {
+
+    var originalArray = which;
+    var newArray = [];
+
+    // While there are elements in the array
+    while (originalArray.length > 0) {
+
+        // Pick a random index
+        var index = Math.floor(Math.random() * originalArray.length);
+
+        // Move the number from 1 array to the other
+        newArray.push(originalArray[index]);
+        originalArray.splice(index,1);        
+    }
+
+    // Return the new array order
+    return newArray;
+}
+
+// Sets up the Questions Order
+function setupQuestions() {
+
+    // Add the total amount of questions
+    for (var i = 0; i < totalQuestions; i++) {
+        questionOrder.push(i);
+    }
+
+    // Shuffle the question order
+    var tempArray = shuffle(questionOrder);
+    questionOrder = tempArray;
+
+}
+
+// Display Next Question
+function displayNextQuestion() {
     
+    var theQuestionText = document.createElement("h2");
+    theQuestionText.textContent = quizQuestions[questionOrder[currentQuestion]].question;
+    theQuestionContainer.appendChild(theQuestionText);
+
+    var theOptions = quizQuestions[questionOrder[currentQuestion]].options;
+
+    for (var i = 0; i < theOptions.length; i++) {
+
+        var theDiv = document.createElement("div");
+        theDiv.setAttribute("class", "theOptions");
+            
+        var thisButton = document.createElement("button");
+        thisButton.setAttribute("data-index", i);
+        thisButton.setAttribute("class", "btn-primary btn-lg");
+        thisButton.textContent = theOptions[i];
+    
+        theDiv.appendChild(thisButton);
+        theQuestionContainer.appendChild(theDiv);
+      }
+
 }
 
 // Countdown Timers
 function countdownStart() {
-    
+
     countDownToStart--;
 
     // Set the Countdown Timer to the current time
     countdownStartElement.textContent = countDownToStart + "...";
-    
+
     if (countDownToStart <= 0) {
         // Stop the Countdown Timer
         clearInterval(startQuizIn);
         // Load the Questions
-        loadQuestions();
+        loadQuestionsContainer();
     }
 }
 
 function countdownQuiz() {
 
     countDownTimer--;
-    
+
     // Set the Quiz Countdown Timer to the current time
     timeRemainingCount.textContent = countDownTimer;
-    
+
     if (countDownTimer <= 0) {
         // Stop the Quiz Countdown Timer
         clearInterval(quizEndsIn);

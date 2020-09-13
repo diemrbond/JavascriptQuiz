@@ -6,10 +6,18 @@ h1 {
     font-family: 'Press Start 2P', cursive;
 }
 
+h2 {
+    margin-bottom: 20px;
+}
+
 .instructions {
     font-size: 1.2em;
     padding: 10px;
     padding-bottom: 20px;
+}
+
+.theOptions {
+    padding-top: 10px;
 }
 
 /* Set Initial States to Hidden */
