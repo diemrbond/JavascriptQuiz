@@ -15,6 +15,10 @@ h1 {
     h1 {
         font-size: 1.1em;
     }
+
+    .ml-3 {
+        margin-left: 0 !important;
+    }
 }
 
 h2 {
